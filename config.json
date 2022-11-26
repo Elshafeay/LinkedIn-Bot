@@ -1,0 +1,18 @@
+{
+  "browserOptions": {
+    "headless": {
+        "headless": true,
+        "args": [                
+            "--window-size=1920,1040"        
+        ],
+        "defaultViewport": null
+    },
+    "gui": {
+        "headless": false,
+        "args": [                
+            "--start-maximized"           
+        ],
+        "defaultViewport": null
+    }
+  }
+}

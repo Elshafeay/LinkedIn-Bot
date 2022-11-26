@@ -1,0 +1,191 @@
+{
+  "credentials": {
+    "username": "", 
+    "password": ""
+  },
+  "searchCriteria": {
+    "jobNature": {
+      "remote": false,
+      "hybrid": false,
+      "onSite": false,
+  
+      "_comment_": "You can select MORE than one",
+      "__comment__": "Any Nature is the default here if nothing is selected"
+    },
+    "jobDate": {
+      "pastMonth": true,
+      "pastWeek": false,
+      "pastDay": false,
+  
+      "_comment_": "You can select ONLY one",
+      "__comment__": "Any Date is the default here if nothing is selected"
+    },
+    "jobExperience": {
+      "internship": false,
+      "entryLevel": false,
+      "associate": false,
+      "midSenior": true,
+      "director": false,
+      "executive": false,
+  
+      "_comment_": "You can select MORE than one",
+      "__comment__": "Any Experience is the default here if nothing is selected"
+    },
+    "jobType": {
+      "fullTime": true,
+      "partTime": true,
+      "contract": false,
+      "temporary": false,
+      "volunteer": false,
+      "internship": false,
+      "other": false,
+  
+      "_comment_": "You can select MORE than one",
+      "__comment__": "Any Type is the default here if nothing is selected"
+    },
+    "under10Applicants": false,
+    "jobTitles": [
+      "Senior Node.js"
+    ],
+    "jobLocations": [
+      "United Kingdom",
+      "Germany",
+      "United States",
+      "Canada",
+      "Spain",
+      "Switzerland",
+      "Netherlands",
+      "Czech Republic"
+    ],
+    "blacklist": {
+      "titles": ["frontend", "front end", "front-end", "contract", "c++", "php", ".net", "c#", "architect"],
+      "companies": ["meta"]
+    },
+    "mustIncludeWord": "node",
+    "startPage": 0,
+    "pagesDepth": 10,
+
+    "_comment_": "mustIncludeWord is an important keyword that must exist in the job description, otherwise it will skip the job",
+    "__comment__": "mustIncludeWord can be left empty if you don't wanna use this feature"
+  },
+  "formData": {
+    "personalInfo": {
+      "firstName": "Mohamed",
+      "emailAddress": "mohamedelshafeay@gmail.com",
+      "lastName": "Elshafeay",
+      "countryCode": "Egypt (+20)",
+      "phoneNumber": "1013969796",
+      "addressLine1": "Nasr City, Zahraa",
+      "addressLine2": "",
+      "city": "Cairo, Egypt",
+      "state": "Cairo",
+      "zip": "4450113",
+      "linkedin": "https://www.linkedin.com/in/elshafeay",
+      "website": "https://github.com/Elshafeay",
+      "summary": "",
+      "nationality": "Egyptian",
+      "gender": "Male",
+
+      "_comment_": "Country Code has to match what LinkedIn has",
+      "__comment__": "City has to match what LinkedIn has",
+      "___comment___": "Gender has (Male/Female/Divers/Do not want to answer) options"
+    },
+    "files": {
+      "resume": "D:\\work\\CV\\MohamedElshafeay_CV(Sept-2022).pdf",
+      "photo": ""
+    },
+    "inputs": {
+      "driversLicence": true,
+      "legallyAuthorized": false,
+      "requireVisa": true,
+      "urgentFill": true,
+      "willingToRelocate": true,
+      "willingToWorkRemotley": true,
+      "backgroundCheck": true,
+      "degreeCompleted": "Bachelor's Degree",
+      "dataRetention": true,
+      "criminalRecord": false,
+      "livingIn": "Egypt",
+      "salary": "$70k",
+      "salaryInNumbers": 70000,
+      "noticePeriod": "6 Weeks",
+      "currentEmployer": "Trufla/Udacity",
+      "acceptPrivacyPolicy": true,
+      "whenCanYouStart": "01.2023",
+      "messageToHiringManager": "This application has been submitted to you using a bot that I built.",
+
+      "_comment_": "whenCanYouStart must be in format MM.YYYY"
+    },
+    "technologies": {
+      "Node.js": 3,
+      "React.js": 1,
+      "JavaScript": 4,
+      "TypeScript": 3,
+      "Java": 1,
+      "Scala": 0,
+      "Python": 1,
+      "Python (Programming Language)": 1,
+      "Google Cloud Platform (GCP)": 1,
+      "AWS": 3,
+      "Amazon Web Services (AWS)": 3,
+      "MongoDB": 2,
+      "Full-Stack Development": 2,
+      ".NET Core": 0,
+      "Angular": 1,
+      "Databases": 4,
+
+      "default": 1
+    },
+    "industries": {
+      "Accounting/Auditing": 0,
+      "Administrative": 0,
+      "Advertising": 0,
+      "Analyst": 0,
+      "Art/Creative": 0,
+      "Business Development": 0,
+      "Consulting": 0,
+      "Customer Service": 0,
+      "Distribution Design": 0,
+      "Education": 2,
+      "Engineering": 7,
+      "Finance": 0,
+      "General Business": 0,
+      "Health Care": 0,
+      "Human Resources": 0,
+      "Information Technology": 4,
+      "Legal": 0,
+      "Management": 0,
+      "Manufacturing": 0,
+      "Marketing": 0,
+      "Public Relations": 0,
+      "Purchasing": 0,
+      "Product Management": 0,
+      "Project Management": 1,
+      "Production": 0,
+      "Quality Assurance": 0,
+      "Research": 0,
+      "Sales": 0,
+      "Science": 0,
+      "Software Development": 5,
+      "Strategy/Planning": 0,
+      "Supply Chain": 0,
+      "Training": 3,
+      "Writing/Editing": 0,
+
+      "default": 1
+      
+    },
+    "languages": {
+      "German": "None",
+      "English": "Native or bilingual",
+      "Arabic": "Native or bilingual",
+      "Spanish": "Conversational",
+      "French": "None",
+
+      "default": "None"
+    },
+
+    "_comment_": "degreeCompleted options are in enums.ts",
+    "__comment__": "languages options are in enums.ts"
+  }
+}
