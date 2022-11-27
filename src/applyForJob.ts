@@ -25,7 +25,7 @@ export const applyForJob = async (page: Page, job: IJob) => {
   await loadFullPage(page, easyApplySelector);
 
   const { location: officeLocation, type, description } = await getJobDetails(page);
-  
+
   const mustIncludeWord = params.searchCriteria.mustIncludeWord;
   if(mustIncludeWord && !description.toLowerCase().includes(mustIncludeWord.toLowerCase())) {
     console.log('Skipping this job, as it doesn\'t have the mustInclude Keyword');
@@ -87,12 +87,12 @@ const fillTheForm = async (page: Page) => {
 
   const inputs = await page.$$('.pb4 .jobs-easy-apply-form-section__grouping');
   for(let input of inputs){
-    await handleInputs(page, input);
+    await handleInputs(input);
   };
   return await clickSubmitButton(page);
 };
 
-const handleInputs = async (page: Page, input: ElementHandle) => {
+const handleInputs = async (input: ElementHandle) => {
   const inputTextContent = await getElementHandleTextContent(input);
   await sleep(2000);
 
@@ -102,8 +102,7 @@ const handleInputs = async (page: Page, input: ElementHandle) => {
     return;
   }
 
-
-///////////////// Handle Text Inputs /////////////////////////
+  ///////////////// Handle Text Inputs /////////////////////////
 
   // Handle Languages - A another format  (on a scale from 1-10)
   else if(inputTextContent?.toLowerCase().includes('how would you rate your')){
@@ -127,21 +126,6 @@ const handleInputs = async (page: Page, input: ElementHandle) => {
     const industryInput = await input.$('input');
     const industry = trimString(inputTextContent)!
       .split('experience do you currently have in ')[1] as keyof typeof Industries;
-
-    let answer = params.formData.industries[industry];
-    if(answer == undefined ){
-      answer = params.formData.industries.default;
-    }
-
-    await industryInput?.click({ clickCount: 3 });
-    await industryInput?.type(''+answer);
-  }
-
-  // Handle Industries, different format (how many years of [] experience)
-  else if(inputTextContent?.toLowerCase().includes('how many years of')){
-    const industryInput = await input.$('input');
-    const industry = trimString(inputTextContent)!
-      .split('How many years of ')[1].split(' experience')[0] as keyof typeof Industries;
 
     let answer = params.formData.industries[industry];
     if(answer == undefined ){
@@ -180,6 +164,21 @@ const handleInputs = async (page: Page, input: ElementHandle) => {
 
     await technologyInput?.click({ clickCount: 3 });
     await technologyInput?.type(''+answer);
+  }
+
+  // Handle Industries, different format (how many years of [] experience)
+  else if(inputTextContent?.toLowerCase().includes('how many years of')){
+    const industryInput = await input.$('input');
+    const industry = trimString(inputTextContent)!
+      .split('How many years of ')[1].split(' experience')[0] as keyof typeof Industries;
+
+    let answer = params.formData.industries[industry];
+    if(answer == undefined ){
+      answer = params.formData.industries.default;
+    }
+
+    await industryInput?.click({ clickCount: 3 });
+    await industryInput?.type(''+answer);
   }
 
   // Handle First Name
@@ -240,7 +239,7 @@ const handleInputs = async (page: Page, input: ElementHandle) => {
     await startingDateInput?.click({ clickCount: 3 });
     await startingDateInput?.type(params.formData.inputs.whenCanYouStart);
   }
-  
+
   // Handle Message to The Hiring Manager
   else if(inputTextContent?.toLowerCase().includes('message to the hiring manager')){
     const messageTextarea = await input.$('textarea');
@@ -280,11 +279,11 @@ const handleInputs = async (page: Page, input: ElementHandle) => {
   else if(
     inputTextContent?.toLowerCase().includes('minimum salary expectation') ||
     inputTextContent?.toLowerCase().includes('salary expectations for this position'
-  )
+    )
   ){
     const salaryInput = await input.$('input');
     await salaryInput?.click({ clickCount: 3 });
-    await salaryInput?.type(""+params.formData.inputs.salaryInNumbers);
+    await salaryInput?.type(''+params.formData.inputs.salaryInNumbers);
   }
 
   // Handle Salary
@@ -294,7 +293,7 @@ const handleInputs = async (page: Page, input: ElementHandle) => {
     await salaryInput?.type(params.formData.inputs.salary);
   }
 
-///////////////// Handle files /////////////////////////
+  ///////////////// Handle files /////////////////////////
 
   // Handle CV
   else if(inputTextContent?.toLowerCase().includes('resume')){
@@ -306,19 +305,25 @@ const handleInputs = async (page: Page, input: ElementHandle) => {
       return;
     }
   }
-  
+
   // Handle Photo
-  else if(inputTextContent?.toLowerCase().includes('photo') && params.formData.files.photo){
-    const uploadButton = await input.$('.jobs-document-upload__build-resume-container input') as ElementHandle<HTMLInputElement>;
-    if(uploadButton){
-      await uploadButton?.uploadFile(params.formData.files.photo);
+  else if(inputTextContent?.toLowerCase().includes('photo')){
+    if(params.formData.files.photo){
+      const uploadButton = await input.$('.jobs-document-upload__build-resume-container input') as ElementHandle<HTMLInputElement>;
+      if(uploadButton){
+        await uploadButton?.uploadFile(params.formData.files.photo);
+      }else{
+        // it's already uploaded
+        return;
+      }
     }else{
-      // it's already uploaded
-      return;
+      // removing it if it does exist
+      const removeButton = await input.$('.jobs-document-upload__remove-file');
+      await removeButton?.click();
     }
   }
 
-///////////////// Handle Radio Button Inputs /////////////////////////
+  ///////////////// Handle Radio Button Inputs /////////////////////////
 
   // Handle Languages - A another format (Are you able to speak, write, and read [] fluently? )
   else if(inputTextContent?.toLowerCase().includes('fluently')){
@@ -382,7 +387,7 @@ const handleInputs = async (page: Page, input: ElementHandle) => {
 
     const toClickRadio = params.formData.inputs.requireVisa? yesNoRadios[0]: yesNoRadios[1];
     await toClickRadio.click();
-  }  
+  }
 
   // Do you have a valid work permit for []
   else if(inputTextContent?.toLowerCase().includes('valid work permit')){
@@ -408,6 +413,14 @@ const handleInputs = async (page: Page, input: ElementHandle) => {
     await toClickRadio.click();
   }
 
+  // Are you willing to take a drug test, in accordance with local law/regulations?
+  else if(inputTextContent?.toLowerCase().includes('take a drug test')){
+    const yesNoRadios = await input.$$('input');
+
+    const toClickRadio = params.formData.inputs.drugTest? yesNoRadios[0]: yesNoRadios[1];
+    await toClickRadio.click();
+  }
+
   // comfortable working in [] environment
   else if(inputTextContent?.toLowerCase().includes('comfortable working')){
     const yesNoRadios = await input.$$('input');
@@ -417,8 +430,7 @@ const handleInputs = async (page: Page, input: ElementHandle) => {
     await toClickRadio.click();
   }
 
-
-////////////////////// Handle Dropdown Inputs ///////////////////////// 
+  ////////////////////// Handle Dropdown Inputs /////////////////////////
 
   // Handle Phone Number
   if(inputTextContent?.toLowerCase().includes('country code')){
@@ -446,10 +458,11 @@ const handleInputs = async (page: Page, input: ElementHandle) => {
     const yesNoDropdownMenu = await input.$('fb-dropdown__select');
     await yesNoDropdownMenu?.select(params.formData.inputs.acceptPrivacyPolicy? 'Yes': 'No');
   }
-  
+
   // legally authorized to work in []
   if(
     inputTextContent?.toLowerCase().includes('legally authorized') ||
+    inputTextContent?.toLowerCase().includes('eligible to') ||
     inputTextContent?.toLowerCase().includes('working permit')
   ){
     const yesNoDropdownMenu = await input.$('fb-dropdown__select');
@@ -464,11 +477,26 @@ const handleInputs = async (page: Page, input: ElementHandle) => {
     await yesNoDropdownMenu?.select(params.formData.inputs.livingIn === country? 'Yes': 'No');
   }
 
+  else if(inputTextContent?.toLowerCase().includes('currently live in')){
+    const yesNoDropdownMenu = await input.$('fb-dropdown__select');
+    const country = trimString(inputTextContent)!
+      .split('currently live in ')[1];
+    await yesNoDropdownMenu?.select(params.formData.inputs.livingIn === country? 'Yes': 'No');
+  }
+
   // currently based in []
   else if(inputTextContent?.toLowerCase().includes('currently based in')){
     const yesNoDropdownMenu = await input.$('fb-dropdown__select');
     const country = trimString(inputTextContent)!
       .split('currently based in ')[1];
+    await yesNoDropdownMenu?.select(params.formData.inputs.livingIn === country? 'Yes': 'No');
+  }
+
+  // currently located in []
+  else if(inputTextContent?.toLowerCase().includes('currently located in')){
+    const yesNoDropdownMenu = await input.$('fb-dropdown__select');
+    const country = trimString(inputTextContent)!
+      .split('currently located in ')[1];
     await yesNoDropdownMenu?.select(params.formData.inputs.livingIn === country? 'Yes': 'No');
   }
 
@@ -490,8 +518,8 @@ const handleInputs = async (page: Page, input: ElementHandle) => {
 
     await genderDropdownMenu?.select(params.formData.personalInfo.gender);
   }
-    
-////////////////////// Handle Checkbox Inputs ///////////////////////// 
+
+  ////////////////////// Handle Checkbox Inputs /////////////////////////
 
   // privacy policy acceptance
   else if(inputTextContent?.toLowerCase().includes('by checking this box')){
@@ -504,7 +532,7 @@ const handleInputs = async (page: Page, input: ElementHandle) => {
   // which location are you applying for
   else if(inputTextContent?.toLowerCase().includes('which location are you applying for')){
     const checkboxes = await input.$$('input');
-    
+
     for(let checkBox of checkboxes){
       await checkBox?.evaluate(ch => (<HTMLElement>ch).click());
     }

@@ -102,6 +102,7 @@
       "willingToRelocate": true,
       "willingToWorkRemotley": true,
       "backgroundCheck": true,
+      "drugTest": true,
       "degreeCompleted": "Bachelor's Degree",
       "dataRetention": true,
       "criminalRecord": false,
@@ -133,6 +134,7 @@
       ".NET Core": 0,
       "Angular": 1,
       "Databases": 4,
+      "Software Architecture": 2,
 
       "default": 1
     },
